@@ -1,30 +1,42 @@
+/* Slider Container */
 .slider {
     position: relative;
-    /* max-width: 600px; Adjust as needed */
     margin: 2% auto;
     margin-top: -1%;
     overflow: hidden;
     width: 95%;
+    border-radius: 10px; /* Rounded corners for a soft look */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Add subtle shadow for depth */
 }
 
+/* Slides */
 .slides {
     display: flex;
     transition: transform 0.5s ease-in-out;
 }
 
+/* Individual Slide */
 .slide {
     min-width: 100%;
     box-sizing: border-box;
 }
 
+/* Image Styling */
 .slider img {
-    width: 100%; /* Make images responsive */
+    width: 100%; 
     display: block;
-    height: 390px;
+    height: 450px;
     object-fit: cover;
-
+    border-radius: 8px; /* Slight rounding of image corners */
+    transition: transform 0.3s ease; /* Smooth zoom effect on hover */
 }
 
+/* Hover effect on images */
+.slider img:hover {
+    transform: scale(1.05); /* Slight zoom-in effect on hover */
+}
+
+/* Button Styling */
 .slider button {
     position: absolute;
     top: 50%;
@@ -32,14 +44,42 @@
     background-color: rgba(255, 255, 255, 0.7);
     border: none;
     cursor: pointer;
-    padding: 10px;
-    font-size: 18px;
+    padding: 15px;
+    font-size: 24px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for buttons */
+    transition: background-color 0.3s, transform 0.3s;
 }
 
+/* Button Hover Effect */
+.slider button:hover {
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly brighter button on hover */
+    transform: scale(1.1); /* Slight scale-up effect */
+}
+
+/* Left Button (Previous) */
 .prev {
-    left: 10px;
+    left: 15px;
 }
 
+/* Right Button (Next) */
 .next {
-    right: 10px;
+    right: 15px;
+}
+
+/* Button Focus (removes default outline) */
+.slider button:focus {
+    outline: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .slider img {
+        height: 450px; /* Reduce height for mobile devices */
+    }
+
+    .slider button {
+        padding: 12px;
+        font-size: 20px; /* Smaller buttons on mobile */
+    }
 }

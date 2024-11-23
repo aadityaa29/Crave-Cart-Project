@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon - Food Order</title>
+    <style>
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    background: linear-gradient(to right, #ff9a8b, #fecfef, #f3c4fb);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Animated Background Bubbles */
+body::before,
+body::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    animation: float 10s infinite alternate ease-in-out;
+    pointer-events: none;
+}
+
+body::after {
+    animation-delay: 5s;
+}
+
+/* Animation for floating effect */
+@keyframes float {
+    0% {
+        transform: translate(-45%, -45%);
+    }
+    100% {
+        transform: translate(-55%, -55%);
+    }
+}
+
+/* Container */
+.container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    max-width: 450px;
+    animation: fadeIn 2s ease-in-out;
+    z-index: 1;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Title & Description */
+.content h1 {
+    font-size: 2.8em;
+    margin-bottom: 15px;
+    color: #ff6f61;
+    letter-spacing: 1px;
+    animation: popIn 1.5s ease-in-out;
+}
+
+.content p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+/* Countdown */
+#countdown {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    font-size: 1em;
+    color: #444;
+    gap: 10px;
+}
+
+#countdown div {
+    text-align: center;
+    background: #ffe4e1;
+    padding: 10px 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 80px;
+}
+
+#countdown span {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    color: #ff6f61;
+}
+
+/* Button */
+#notifyBtn {
+    background: linear-gradient(to right, #ff6f61, #ff9671);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1em;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(255, 111, 97, 0.3);
+}
+
+#notifyBtn:hover {
+    background: linear-gradient(to right, #ff9671, #ff6f61);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 111, 97, 0.5);
+}
+
+/* Footer */
+.footer {
+    position: absolute;
+    bottom: 20px;
+    text-align: center;
+    width: 100%;
+    font-size: 0.9em;
+    color: #666;
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 30px 20px;
+    }
+
+    #countdown div {
+        min-width: 60px;
+        padding: 8px 10px;
+    }
+
+    #notifyBtn {
+        font-size: 1em;
+        padding: 10px 25px;
+    }
+
+    .content h1 {
+        font-size: 2em;
+    }
+
+    .content p {
+        font-size: 1em;
+    }
+}
+
+    </style>
+    <script>
+        // Countdown Timer
+const targetDate = new Date("December 25, 2024 00:00:00").getTime();
+
+const countdown = () => {
+    const now = new Date().getTime();
+    const difference = targetDate - now;
+
+    if (difference < 0) {
+        document.getElementById("countdown").innerHTML = "We're Live!";
+        return;
+    }
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    document.getElementById("days").innerText = days;
+    document.getElementById("hours").innerText = hours;
+    document.getElementById("minutes").innerText = minutes;
+    document.getElementById("seconds").innerText = seconds;
+};
+
+// Refresh countdown every second
+setInterval(countdown, 1000);
+
+// Notify Button Interaction
+document.getElementById("notifyBtn").addEventListener("click", () => {
+    alert("We'll notify you when we're live. Stay tuned!");
+});
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <!-- 
+View the city's favourite dining venues -->
+            <h1>🍕 Our Night Clubs Option is Coming Soon!</h1>
+            <p>Stay tuned to explore your city's Popular Night Clubs and best Party Spots.</p>
+            <div id="countdown">
+                <div><span id="days">00</span>Days</div>
+                <div><span id="hours">00</span>Hours</div>
+                <div><span id="minutes">00</span>Minutes</div>
+                <div><span id="seconds">00</span>Seconds</div>
+            </div>
+            <button id="notifyBtn">Notify Me</button>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Food Order. All rights reserved.</p>
+    </div>
+</body>
+</html>

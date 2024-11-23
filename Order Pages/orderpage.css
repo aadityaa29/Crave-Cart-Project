@@ -5,8 +5,8 @@
 }
 
 .nav-contain {
+    width: 95%;
     background-color: rgb(255, 255, 255);
-    width: 80%;
     margin: auto;
     padding:10px 20px;
     display: flex;
@@ -16,6 +16,7 @@
 }
 
 .nav-contain .nav-logo img {
+    margin-right: 9px;
     width: 12rem;
     height: 7rem;
 }
@@ -137,6 +138,7 @@
     font-weight: 400;
     font-size: 20px;
     padding: 10px 10px;
+    text-wrap: nowrap;
 
 }
 
@@ -147,7 +149,7 @@
 .top-line{
     display: flex;
     width: 75%;
-    margin-left: 20px;
+    margin-left: 38px;
     padding-top: 25px;
 }
 
@@ -166,7 +168,7 @@
     gap: 12px;
     width: 75%;
     margin-left: 20px;
-    padding: 30px 0px;
+    padding: 30px 25px;
 }
 
 .btn1:hover{

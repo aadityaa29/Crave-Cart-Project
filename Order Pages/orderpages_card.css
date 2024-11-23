@@ -1,103 +1,246 @@
-.item-hero{
-    background-color: #f8d2bf;
-    width: 95%;
-    height: auto;
-    margin: 20px auto;
-    margin-top: 3px;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-/* card css */
-
-.card{
-    font-weight: bold;
-    width: 250px;
-    height: 310px;
-    background-color: white;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 12px;
-    gap: 8px;
-  }
-  
-  .card-image {
-    width: auto;
-    height: 130px;
-    overflow: hidden;
-    transition: transform 0.5s ease-in-out;
-    cursor: grab;
-    border-radius: 10px;
-  }
-  
-  .card-image:hover {
-    transform: scale(1.1);
-  }
-  
-  .card-details {
-    font-size: 14px;
-    display: flex;
-    justify-content: space-between;
-    padding-top: 7px;
-  }
-  .card-details h2{
-    text-wrap: nowrap;
-    text-overflow:ellipsis;
-    max-width: 80%;
-  }
-  
-  .price {
-    font-size: 18px ;
-    color: #22c55e;
-  }
-  
-  .description {
-    padding: 0px;
-    text-align:left;
-    font-size: 18px;
-    font-weight: 400;
-  }
-  
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 15px;
-  }
-  
-  .rating {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: black;
-
-  }
-
-  .add-to-cart {
-    padding: 8px;
-    background-color: #22c55e;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .add-to-cart:hover {
-    background-color: #16a34a;
-}
-
-td{
-    padding: 10px 10px;
-}
-
-.heading h2 {
-  font-size: 45px;
+/* Page Header */
+h1 {
+  font-size: 50px;
   text-align: center;
-  padding-top: 20px;
-  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
 
+/* Menu Container */
+.menu {
+  width: 95%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Flexible grid */
+  gap: 20px; /* Space between cards */
+  padding: 30px 20px;
+  margin-top: 20px;
+  background-color: #f4f4f4; /* Light background for the menu */
+}
+
+/* Individual Card */
+.card {
+  background: #fff;
+  border-radius: 12px; /* Slightly rounded corners for a softer feel */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Deeper shadow for a more lifted effect */
+  overflow: hidden;
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+  opacity: 1;
+  animation: fadeIn 0.5s ease-out; /* Smooth fade-in effect */
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card:hover {
+  transform: translateY(-10px); /* Slight lift effect */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* Ensure image fits well */
+  border-bottom: 3px solid #ddd; /* Thicker separator */
+  transition: transform 0.3s ease, filter 0.3s ease;
+  filter: brightness(85%);
+}
+
+.card img:hover {
+  transform: scale(1.05); /* Zoom effect on hover */
+  filter: brightness(100%); /* Brighten on hover */
+}
+
+/* Card Body */
+.card-body {
+  padding: 20px;
+  text-align: center; /* Center-align text */
+  background: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.card-body:hover {
+  background-color: #f9f9f9; /* Light background on hover */
+}
+
+/* Card Title */
+.card-title {
+  font-size: 2.5rem;
+  margin: 15px 0;
+  color: #333;
+  font-weight: 800;
+  text-transform: capitalize;
+  letter-spacing: 1px; /* Slight spacing for a modern look */
+  transition: color 0.3s ease;
+}
+
+.card-title:hover {
+  color: #19a3ada3; /* Blue color on hover for the title */
+}
+
+/* Card Description */
+.card-description {
+  font-size: 1.7rem;
+  color: #555;
+  margin: 10px 0 20px;
+  line-height: 1.6;
+  max-height: 120px;
+  overflow: hidden;
+  text-align: justify;
+  transition: color 0.3s ease;
+}
+
+.card-description:hover {
+  color: #333; /* Darker text color on hover */
+}
+
+/* Add to Cart Button */
+.add-to-cart-btn {
+  display: inline-block;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #ff8c00, #ff6f00); /* Gradient button */
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: background 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-to-cart-btn:hover {
+  background: linear-gradient(135deg, #e07b00, #e64a00); /* Darker gradient */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+.add-to-cart-btn:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 140, 0, 0.8); /* Focus shadow */
+}
+
+/* Cart Button Styles */
+.cart-button {
+  position: fixed;
+  bottom: 26px;
+  right: 27px;
+  background: #16d737;
+  color: black;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.cart-button:hover {
+  transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+/* Cart Modal */
+.cart-modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 15px; /* Round corners for a modern look */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow for depth */
+  width: 450px; /* Increased width */
+  height: 300px;
+  padding: 30px; /* Increased padding for more space */
+  z-index: 1001;
+  transition: transform 0.3s ease;
+}
+
+.cart-modal h3 {
+  margin-top: 0;
+  font-size: 3.8rem; /* Larger font for header */
+  color: #333;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.cart-modal ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.cart-modal ul li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 1.5rem;
+  color: #555;
+}
+
+.cart-modal button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #28a745, #218838); /* Green gradient background */
+  color: white;
+  border: none;
+  border-radius: 8px; /* Rounded button corners */
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.cart-modal button:hover {
+  background: linear-gradient(135deg, #218838, #1e7e34); /* Darker green on hover */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Modal Close Button */
+.cart-modal .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4d4d; /* Red background */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.cart-modal .close-btn:hover {
+  background: #e04343; /* Darker red on hover */
+}
+
+/* Cart Overlay */
+.cart-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }

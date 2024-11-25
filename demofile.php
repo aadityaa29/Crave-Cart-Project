@@ -1,115 +1,140 @@
 <?php
-// backend.php
+include './db_connection/db_check.php';
 
-header('Content-Type: application/json');
+$sql = "SELECT * FROM restaurants";
+$result = mysqli_query($conn, $sql);
 
-// Simulating backend processing
-$response = [
-    "status" => "success",
-    "message" => "Coming Soon! We are working on it."
-];
-
-// Log the request (optional)
-file_put_contents('logs.txt', json_encode($response) . PHP_EOL, FILE_APPEND);
-
-echo json_encode($response);
+$data = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+}
+echo json_encode($data);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coming Soon</title>
+  <title>Document</title>
+  
   <style>
-    body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(to right, #2980b9, #6dd5fa, #ffffff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    color: #2c3e50;
-  }
-  
-  .coming-soon-container {
-    text-align: center;
+    .restaurant-hero {
     padding: 20px;
-    border: 2px solid #fff;
-    border-radius: 10px;
-    background-color: #ffffff;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  button {
-    background-color: #2980b9;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
+    background-color: #f9f9f9;
+}
+.restaurant-contain {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+#restaurant-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+#restaurant-table td {
+    padding: 15px;
+    vertical-align: top;
+}
+.restaurant {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+.restaurant img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.restaurant h2 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+.restaurant-footer {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+.btn-view-menu,
+.btn-add-favorites {
+    margin: 5px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #1f5c7a;
-  }
-  
-  .popup {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    color: #333;
-    display: none;
-  }
-  
-  .popup.hidden {
-    display: none;
-  }
-  
-  .popup.visible {
-    display: block;
-  }
-  
+}
+.btn-view-menu:hover,
+.btn-add-favorites:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    #restaurant-table td {
+        display: block;
+        width: 100%;
+    }
+    .restaurant {
+        margin-bottom: 20px;
+    }
+}
+
+
   </style>
 </head>
 <body>
-  <div class="coming-soon-container">
-    <h1>Our Amazing Feature</h1>
-    <p>Click the button below to learn more!</p>
-    <button id="comingSoonButton">Learn More</button>
-    <div id="comingSoonPopup" class="popup hidden">
-      <p>🚧 Coming Soon! We are working hard to bring this feature to you. Stay tuned! 🚧</p>
-    </div>
-  </div>
 
-  <script>
-    document.getElementById('comingSoonButton').addEventListener('click', function () {
-  const popup = document.getElementById('comingSoonPopup');
-  popup.classList.toggle('hidden');
-  popup.classList.toggle('visible');
-});
+<button class='btn-view-menu'>View Menu</button>
+<button class='btn-add-favorites'>Add to Favorites</button>
 
-document.getElementById('comingSoonButton').addEventListener('click', function () {
-  fetch('backend.php')
-    .then(response => response.json())
-    .then(data => {
-      const popup = document.getElementById('comingSoonPopup');
-      popup.textContent = data.message;
-      popup.classList.toggle('hidden');
-      popup.classList.toggle('visible');
-    })
-    .catch(error => {
-      console.error('Error fetching from the backend:', error);
+  
+
+<script>
+  document.querySelectorAll('.btn-view-menu').forEach(button => {
+    button.addEventListener('click', function () {
+        const restaurantName = this.closest('.restaurant').querySelector('h2').textContent;
+        alert(`Fetching menu for ${restaurantName}`);
+        // You can use fetch() or redirect the user here
     });
 });
 
+fetch('fetch_restaurants.php')
+    .then(response => response.json())
+    .then(data => {
+        const tableBody = document.querySelector('#restaurant-table tbody');
+        tableBody.innerHTML = ''; // Clear existing content
+        data.forEach((restaurant, index) => {
+            const rowOpen = index % 3 === 0 ? '<tr>' : '';
+            const rowClose = index % 3 === 2 ? '</tr>' : '';
+            tableBody.innerHTML += `
+                ${rowOpen}
+                <td>
+                    <div class="restaurant">
+                        <img src="${restaurant.image_url}" alt="${restaurant.restaurant_name}" class="restaurant-image">
+                        <div class="restaurant-details">
+                            <h2>${restaurant.restaurant_name}</h2>
+                            <span class="rating"><i data-feather="star"></i> ${restaurant.rating}</span>
+                        </div>
+                        <p class="restaurant-description">${restaurant.description}</p>
+                        <div class="restaurant-footer">
+                            <p>${restaurant.price_per_person} per person</p>
+                            <p>${restaurant.delivery_time}</p>
+                        </div>
+                        <button class="btn-view-menu">View Menu</button>
+                    </div>
+                </td>
+                ${rowClose}
+            `;
+        });
+    });
 
-  </script>
+
+</script>
 </body>
 </html>

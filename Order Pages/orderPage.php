@@ -1,33 +1,36 @@
 <?php
+
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    // Redirect to login page
+    header("Location: ../Login/login.php");
+    exit();
+}
+
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Database connection
-$conn = new mysqli("localhost", "root", "", "zomato_db");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include '../db_connection/db_check.php';
 
 // Initialize a message variable
 $message = "";
 
-// Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['itemsbtn'])) {
     $name = $_POST["food_name"];
     $description = $_POST["description"];
     $image = $_POST["food_url"];
 
-    // Check for duplicate entries in the database
     $check_sql = "SELECT * FROM `menu` WHERE `name` = '$name'";
     $check_result = mysqli_query($conn, $check_sql);
 
     if (mysqli_num_rows($check_result) > 0) {
-        $message = "Error: This food item already exists in the database.";
+        echo "<script> alert('$message = Error: This food item already exists in the database.')</script>";
     } else {
-        // Insert the new record
         $sql = "INSERT INTO `menu` (`name`, `description`, `image_url`) VALUES ('$name', '$description', '$image')";
         if (mysqli_query($conn, $sql)) {
-            // Redirect to prevent duplicate submission
             header("Location: " . $_SERVER["PHP_SELF"] . "?success=true");
             exit;
         } else {
@@ -35,6 +38,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['itemsbtn'])) {
         }
     }
 }
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['itemdelete']))
+{
+  $name = $_POST["food_name"];
+  $sql = "DELETE FROM `menu` WHERE `name` = '$name'";
+  if (mysqli_query($conn, $sql)) {
+    header("Location: " . $_SERVER["PHP_SELF"] . "?success=true");
+    exit;
+    } else {
+      $message = "Error deleting food: " . mysqli_error($conn);
+      }
+}
+
 
 // Fetch data from the menu table
 $sql = "SELECT * FROM `menu`";
@@ -54,7 +70,7 @@ $result = $conn->query($sql);
   <link rel="icon" href="../All Images/Landing Page Images/zpmato-icon.png">
 
   <link rel="stylesheet" href="../Landing Pages/zomato.css" />
-  <link rel="stylesheet" href="./orderpage.css?v=1.2" />
+  <link rel="stylesheet" href="./orderpage.css?v=1.1" />
   <link rel="stylesheet" href="./orderpages_card.css?v=1.1">
   <link rel="stylesheet" href="./orderpage_menu.css?v=1.1">
   <link rel="stylesheet" href="./orderpageslider.css?v=1.2">
@@ -62,8 +78,10 @@ $result = $conn->query($sql);
   <link rel="stylesheet" href="./restaurant.css">
   <link rel="stylesheet" href="./loading.css?v=1.1">
   <link rel="stylesheet" href="./add_food.css?v=1.1">
-  <link rel="stylesheet" href="./reataurent_model.css">
+  <link rel="stylesheet" href="./reataurent_model.css?v=1.2">
+  <link rel="stylesheet" href="./delete_model.css">
   <link rel="stylesheet" href="../Landing Pages/footer.css">
+  <link rel="stylesheet" href="./welcom_user.css">
 
   <!-- Outside -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -74,9 +92,16 @@ $result = $conn->query($sql);
 
   <!-- Loading Screen -->
   <div id="loading-screen" class="loading-screen">
-    <div class="spinner"></div>
-    <h2>Loading...</h2>
-  </div>
+    <div class="spinner-wrapper">
+        <div class="spinner"></div>
+        <div class="icon-container">
+            <div class="icon burger"></div>
+            <div class="icon pizza"></div>
+            <div class="icon circle"></div>
+        </div>
+    </div>
+    <p>Loading... Please wait</p>
+</div>
 
   <div class="nav-contain">
     <div class="nav-logo">
@@ -97,40 +122,49 @@ $result = $conn->query($sql);
         <input placeholder="Search for a restaurent, cusine or a dish" class="search-box" />
       </div>
     </div>
+
+    <!-- name pop-up -->
+    <div class="user-greeting">
+    <div class="user-icon">
+        <i data-feather="user"></i>
+    </div>
+    <div class="user-text">
+        <span class="welcome">Welcome</span>  
+        <span class="username"><?php echo ($_SESSION['username']); ?></span>
+    </div>
+</div>
+
     <div class="log-conatin">
       <div class="nav-element">
-        <a href="../Login/login.html">Login</a>
+      <a href="../Login/logout.php">Logout</a>
+      <i data-feather="log-out"></i> 
       </div>
-      <div class="nav-element">
-        <a href="../Login/login.html">Sign Up</a>
-      </div>
+
+       
       <!-- start -->
 
-      <!-- Add Restaurant Button -->
-      <button class="open-modal-btn1" id="openModalBtn1">Add New Restaurant</button>
       <!-- Modal -->
       <div class="modal-overlay1" id="modalOverlay1"></div>
       <div class="modal1" id="modal1">
         <div class="modal-header1">
-          <h2>Add New Item</h2>
+          <h2>Add New Restaurant</h2>
           <button class="close-btn1" id="closeModalBtn1">&times;</button>
         </div>
         <div class="modal-body">
 
-          <form action="orderPage.php" method="POST">
-            <label for="name">name</label>
+          <form action="orderPage.php" method="POST" class="restaurant-form">
+            <label for="name">Restaurant Name*</label>
             <input type="text" name="name" placeholder="Restaurant Name" required>
-            <label for="name">name</label>
+            <label for="name">Description*</label>
             <textarea name="description" placeholder="Description" required></textarea>
-            <label for="name">name</label>
+            <label for="name">Image URL*</label>
             <input type="text" name="image_url" placeholder="Image URL" required>
-            <label for="name">name</label>
+            <label for="name">Rating*</label>
             <input type="number" step="0.1" name="rating" placeholder="Rating" required>
-            <label for="name">name</label>
+            <label for="name">Price per Person*</label>
             <input type="text" name="price_per_person" placeholder="Price per Person" required>
-            <label for="name">name</label>
+            <label for="name">Delivery Time*</label>
             <input type="text" name="delivery_time" placeholder="Delivery Time" required>
-            <label for="name">name</label>
             <button type="submit" name="restaurantbtn">Add Restaurant</button>
           </form>
         </div>
@@ -138,8 +172,6 @@ $result = $conn->query($sql);
 
       <!-- end of updated php for btn -->
 
-      <!-- Add Item Button -->
-      <button class="open-modal-btn" id="openModalBtn">Add New Item</button>
 
       <!-- Display message -->
       <?php if (!empty($message)): ?>
@@ -157,16 +189,44 @@ $result = $conn->query($sql);
         </div>
         <div class="modal-body">
           <form action="./orderPage.php" method="POST" id="addRestaurantForm">
-            <label for="food_name">Food Name</label>
+            <label for="food_name">Food Name*</label>
             <input type="text" id="food_name" name="food_name" placeholder="Enter Food name" required>
 
-            <label for="description">Description</label>
+            <label for="description">Description*</label>
             <input type="text" id="description" name="description" placeholder="Enter Food Description" required>
 
-            <label for="food_url">Food Image URL</label>
+            <label for="food_url">Food Image URL*</label>
             <input type="url" id="food_url" name="food_url" placeholder="Enter Food URL" required>
 
             <button type="submit" name="itemsbtn">Submit</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Display message -->
+      <?php if (!empty($message)): ?>
+      <div class="message <?php echo strpos($message, 'Error') !== false ? 'error' : ''; ?>">
+        <?php echo $message; ?>
+      </div>
+      <?php endif; ?>
+
+<!-- delete -->
+
+<div class="modal-overlay2" id="modalOverlay2"></div>
+      <div class="modal2" id="modal2">
+        <div class="modal-header2">
+          <h2>Add New Item</h2>
+          <button class="close-btn2" id="closeModalBtn2">&times;</button>
+        </div>
+        <div class="modal-body2">
+          <form action="./orderPage.php" method="POST" id="addRestaurantForm2">
+            <label for="food_name">Food Name*</label>
+            <input type="text" id="food_name" name="food_name" placeholder="Enter Food name" required>
+
+            <label for="food_url">Food ID (optional)</label>
+            <input type="url" id="food_url" name="food_url" placeholder="Enter Food ID (if you have)">
+
+            <button type="submit" name="itemdelete">Delete Item</button>
           </form>
         </div>
       </div>
@@ -183,14 +243,20 @@ $result = $conn->query($sql);
       <a class="last-a" href="#">JIIT, Sector 62, Noida</a>
     </div>
     </div>
+    
+    <?php
 
-    <div class="btn row">
-      <button class="btn1 "> All</button>
-      <button class="btn1"> Breakfast</button>
-      <button class="btn1"> Lunch</button>
-      <button class="btn1"> Snacks</button>
-      <button class="btn1"> Dinner</button>
-    </div>
+if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
+  ?>
+  <div class="btn row">
+      <button class="open-modal-btn1 btn1" id="openModalBtn1">Add New Restaurant</button>
+      <button class="open-modal-btn btn1" id="openModalBtn">Add New Item</button>
+      <button class="open-modal-btn2 btn1" id="openModalBtn2">Delete Item</button>
+  </div>
+  <?php
+}
+?>
+
 
     <section class="hero-banner">
       <div class="slider">
@@ -352,11 +418,11 @@ $result = $conn->query($sql);
           if ($result->num_rows > 0) {
               while ($row = $result->fetch_assoc()) {
                   echo '<div class="card">';
-                  echo '<img src="' . htmlspecialchars($row['image_url']) . '" alt="' . htmlspecialchars($row['name']) . '">';
+                  echo '<img src="' . ($row['image_url']) . '" alt="' . ($row['name']) . '">';
                   echo '<div class="card-body">';
-                  echo '<h3 class="card-title">' . htmlspecialchars($row['name']) . '</h3>';
-                  echo '<p class="card-description">' . htmlspecialchars($row['description']) . '</p>';
-                  echo '<button class="add-to-cart-btn" data-item="' . htmlspecialchars($row['name']) . '">Add to Cart</button>';
+                  echo '<h3 class="card-title">' . ($row['name']) . '</h3>';
+                  echo '<p class="card-description">' . ($row['description']) . '</p>';
+                  echo '<button class="add-to-cart-btn" data-item="' . ($row['name']) . '">Add to Cart</button>';
                   echo '</div></div>';
               }
           } else {
@@ -409,6 +475,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['restaurantbtn'])) {
     $price_per_person = $_POST['price_per_person'];
     $delivery_time = $_POST['delivery_time'];
 
+    $sql = "SELECT * FROM `restaurants` WHERE restaurant_name = '$name'";
+    $result = mysqli_query($conn, $sql);
+    if(mysqli_num_rows($result) == 1){
+      echo "<script> alert('$message = Restaurant already exists');</script>";
+    }else{
+
     $sql = "INSERT INTO `restaurants` (`restaurant_name`, `description`, `image_url`, `rating`, `price_per_person`, `delivery_time`) VALUES ('$name', '$description', '$image_url', '$rating', '$price_per_person', '$delivery_time')";
 
     if($conn->query($sql) == TRUE) {
@@ -416,6 +488,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['restaurantbtn'])) {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+  }
 
 }
 ?>
@@ -598,6 +671,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['restaurantbtn'])) {
   <script src="./cart.js"></script>
   <script src="./food_model.js"></script>
   <script src="./food_model2.js"></script>
+  <script src="./food_model3.js"></script>
 
 
 

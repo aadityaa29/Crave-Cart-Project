@@ -6,21 +6,24 @@
     align-items: center;
     
 }
-.btn{
-    border: none;
-    color: black;
-    margin-right: 2rem;
-    font-size: 1.8rem;
-    font-weight: 900;
-    margin-top: -9px;
+.btn2{
+    color: rgb(150, 150, 150);
+    font-size: 1.4rem;
+    font-weight: 400;
+    font-size: 20px;
+    padding: 10px 10px;
     background-color: transparent;
+    text-wrap: nowrap;
+    margin-top: -8px;
+    
 }
-.btn:hover{
-    color: blue;
+.btn2:hover{
+    color: black;
 }
 
+
 /* Modal background overlay */
-.modal-overlay {
+.modal-overlay2 {
     display: none;
     position: fixed;
     top: 0;
@@ -32,7 +35,7 @@
 }
 
 /* Modal content */
-.modal {
+.modal2 {
     display: none;
     position: fixed;
     top: 50%;
@@ -46,45 +49,46 @@
     z-index: 1000;
 }
 
-.modal-header {
+.modal-header2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.modal-header h2 {
+.modal-header2 h2 {
+    color: black;
     margin: 0;
 }
 
-.modal-header .close-btn {
+.modal-header2 .close-btn {
     cursor: pointer;
     font-size: 1.5rem;
     background: none;
     border: none;
 }
 
-.modal-body {
+.modal-body2 {
     margin-top: 10px;
 }
 
-.modal-body form {
+.modal-body2 form {
     display: flex;
     flex-direction: column;
 }
 
-.modal-body label {
-    font-size: 15px;
+.modal-body2 label {
+    color: black;
     margin-top: 10px;
 }
 
-.modal-body input {
+.modal-body2 input {
     padding: 10px;
-    border: 1px solid #000;
+    border: 1px solid #ddd;
     border-radius: 5px;
     margin-top: 5px;
 }
 
-.modal-body button {
+.modal-body2 button {
     margin-top: 15px;
     padding: 10px;
     border: none;
@@ -94,10 +98,46 @@
     cursor: pointer;
 }
 
-.modal-body button:hover {
+.modal-body2 button:hover {
     background: #218838;
 }
 
-.restaurant-form > textarea{
-    border: 1px solid #000;
+
+
+
+/* Modal content 2*/
+.modal2 {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    width: 400px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
 }
+
+.modal-header2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header2 h2 {
+    color: black;
+    margin: 0;
+}
+
+.modal-header2 .close-btn {
+    cursor: pointer;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+}
+
+
+
+
